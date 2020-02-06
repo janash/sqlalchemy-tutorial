@@ -48,6 +48,97 @@ To put this into a database, we will want to make some changes to this structure
 
 In relational databases, values which can be searched should be **atomic** (meaning indivisible). The author row violates this, meaning that it violates [first normal form](https://en.wikipedia.org/wiki/First_normal_form).
 
+One solution would be to add several more columns to our spreadsheet (Author1, Author2, Author3). However, this would results in a varying number of columns for each paper. 
+
+Another solution would be to have a separate row for each author
+
+<table style="width:100%">
+    <tr>
+        <th>DOI</th>
+        <th>Title</th>
+        <th>Journal</th>
+        <th>Publication Year</th>
+        <th>Author</th>
+    </tr>
+    <tr>
+        <td>'10.1063/1.5052551'</td>
+        <td>'Perspective: Computational chemistry software and its advancement as illustrated through three grand challenge cases for molecular science'</td>
+        <td>J. Chem. Phys.</td>
+        <td>2018</td>
+        <td>Anna Krylov</td>
+    </tr>
+    <tr>
+        <td>'10.1063/1.5052551'</td>
+        <td>'Perspective: Computational chemistry software and its advancement as illustrated through three grand challenge cases for molecular science'</td>
+        <td>J. Chem. Phys.</td>
+        <td>2018</td>
+        <td>Theresa L. Windus</td>
+    </tr>
+    <tr>
+        <td>'10.1063/1.2137323'</td>
+        <td>'Perspective: Computational chemistry software and its advancement as illustrated through three grand challenge cases for molecular science'</td>
+        <td>J. Chem. Phys.</td>
+        <td>2018</td>
+        <td>Taylor Barnes</td>
+    </tr>
+</table>
+
+We have now fixed the problem of repeating authors, but we now repeat all other information several times. If there was a change to the title of this paper, for example, we would have to update this in all the associated rows. Our goal is to reduce this repetition.
+
+Ultimately, the design which minimizes repetition and enforces atomicity is adding multiple sheets or tables.
+
+## Article Table
+<table style="width:100%">
+    <tr>
+        <th>DOI</th>
+        <th>Title</th>
+        <th>Journal</th>
+        <th>Publication Year</th>
+    </tr>
+        <tr>
+        <td>'10.1063/1.5052551'</td>
+        <td>'Perspective: Computational chemistry software and its advancement as illustrated through three grand challenge cases for molecular science'</td>
+        <td>J. Chem. Phys.</td>
+        <td>2018</td>
+    </tr>
+    <tr>
+        <td>'10.1063/1.2137323'</td>
+        <td>'Sources of error in electronic structure calculations on small chemical systems'</td>
+        <td>J. Chem. Phys.</td>
+        <td>2006</td>
+    </tr>
+</table>
+
+
+## Article - Author Table
+<table style="width:50%">
+    <tr>
+        <th>Article DOI</th>
+        <th>Author</th>
+    </tr>
+    <tr>
+        <td>'10.1063/1.5052551'</td>
+        <td>Anna Krylov</td>
+    </tr>
+    <tr>
+        <td>'10.1063/1.5052551'</td>
+        <td>Theresa L. Windus</td>
+    </tr>
+    <tr>
+        <td>'10.1063/1.5052551'</td>
+        <td>Taylor Barnes</td>
+    </tr>
+    <tr>
+        <td>'10.1063/1.2137323'</td>
+        <td>David Feller</td>
+    </tr>
+</table>
+
+, Kirk A. Peterson, T. Daniel Crawford
+
+Now, there is only one entry for each article in the article table, and a separate entry matching each author with an article.
+
+
 Think about how we might group information about journals into a spreadsheet. Consider what information we might have about our journals. B
 - journal name
 - publisher
