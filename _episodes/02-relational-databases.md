@@ -13,18 +13,42 @@ keypoints:
 
 ## Database structure
 
-In order to create our SQL database, our first step will be to decide the structure.
+In the previous lesson, we mentioned that relational databases are structured and have a specific schema. In order to create our relational database, our first step will be to decide the structure. Relational databases have specific rules which should be used in the database design. The goal of relational databases is to reduce repetition of information and dependencies between rows, this is called normalization.
 
 ### Tables
-The Table is the basic unit of storage in a relational database. A table is made up of columns which define the data being stored in the table, and rows (records) which are entries in the table.
+The Table is the basic unit of storage in a relational database. A table is made up of columns which define the data being stored in the table, and rows (also called records) which are entries in the table.
 
-Before deciding specific tables of our database, let's consider some of our goals
+First, consider what information about some of our papers would look like if we just added it to a spreadsheet.
 
-- We want to store citation information for papers.
-- We would also like to retrieve papers by journal or author.
-- We want to be able to group papers by research project.
+<table style="width:100%">
+    <tr>
+        <th>DOI</th>
+        <th>Title</th>
+        <th>Journal</th>
+        <th>Publication Year</th>
+        <th>Authors</th>
+    </tr>
+    <tr>
+        <td>'10.1063/1.5052551'</td>
+        <td>'Perspective: Computational chemistry software and its advancement as illustrated through three grand challenge cases for molecular science'</td>
+        <td>J. Chem. Phys.</td>
+        <td>2018</td>
+        <td>Anna Krylov, Theresa L. Windus, Taylor Barnes, Eliseo Marin-Rimoldi, Jessica A. Nash, Benjamin Pritchard, Daniel G.A. Smith, Doaa Altarawy, Paul Saxe, Cecilia Clementi, T. Daniel Crawford, Robert J. Harrison, Shantenu Jha, Vijay S. Pande, Teresa Head-Gordon</td>
+    </tr>
+    <tr>
+        <td>'10.1063/1.5052551'</td>
+        <td>'Sources of error in electronic structure calculations on small chemical systems'</td>
+        <td>J. Chem. Phys.</td>
+        <td>2006</td>
+        <td>David Feller, Kirk A. Peterson, T. Daniel Crawford</td>
+    </tr>
+</table>
 
-Think about how we might group information about journals into a spreadsheet. Consider what information we might have about our journals.
+To put this into a database, we will want to make some changes to this structure. Imagine that we have hundreds of articles in our spreadsheet. What if we wanted to find all papers with one particular author? This would be very hard to find.
+
+In relational databases, values which can be searched should be **atomic** (meaning indivisible). The author row violates this, meaning that it violates [first normal form](https://en.wikipedia.org/wiki/First_normal_form).
+
+Think about how we might group information about journals into a spreadsheet. Consider what information we might have about our journals. B
 - journal name
 - publisher
 - associated articles.

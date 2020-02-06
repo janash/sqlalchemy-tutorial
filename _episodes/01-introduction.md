@@ -28,11 +28,13 @@ Consider the following citation for a paper about The Molecular Sciences Softwar
 
 > Krylov, A.; Windus, T. L.; Barnes, T.; Marin-Rimoldi, E.; Nash, J. A.; Pritchard, B.; Smith, D. G. A.; Altarawy, D.; Saxe, P.; Clementi, C.; Crawford, T. D.; Harrison, R. J.; Jha, S.; Pande, V. S.; Head-Gordon, T. Perspective: Computational Chemistry Software and Its Advancement as Illustrated through Three Grand Challenge Cases for Molecular Science. The Journal of Chemical Physics 2018, 149 (18), 180901.
 
-This citation has a lot of data associated with it. There are a number of authors, a title, the journal, publication year, DOI, etc. Each citation has this information, and you likely need to track hundreds (thousands??) of these throughout your research career. 
+This citation has a lot of data associated with it. There are a number of authors, a title, the journal, publication year, DOI, etc. Each citation has this information, and you likely need to track hundreds (thousands??) of these throughout your research career. We will make a database which we can use to manage all of our references. We would like to be able to add and search data on journals, and authors and associate citations with projects.
+
+The first thing we must do before we make our database is decide the type of database we would like to have. The main choice we will be making is whether we want to have a **relational** database or a **nonrelational** database.
 
 ## Database types - relational vs nonrelational
 
-Database structure differs depending on the type of data in the database. If your data has many relations that you would like to be able to query, you will use a relational database. A relational database is made up of several tables which specific schema.  These tables are connected by relationships between them (more on this later). In the relational model of databases, 
+Database structure differs depending on the type of data in the database. If your data has many relations that you would like to be able to query, you will use a relational database. A relational database is made up of several tables which specific schema.  These tables are connected by relationships between them (more on this later).
 
 A non-relational database is does not have tables or relationships. A very popular non-relational database software is [mongoDB](https://www.mongodb.com/). In mongoDB, you have collections of data with associated documents. The structure of the document can vary for each entry. Because there is no schema,non relational databases are more flexible than relational databases. However, because there is no schema or relations, data is often duplicated within the database.
 
