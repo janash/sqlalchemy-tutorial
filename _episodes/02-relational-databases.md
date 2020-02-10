@@ -135,6 +135,10 @@ Ultimately, the design which minimizes repetition and enforces atomicity is addi
     </tr>
     <tr>
         <td>'10.1063/1.5052551'</td>
+        <td>T. Daniel Crawford</td>
+    </tr>
+    <tr>
+        <td>'10.1063/1.5052551'</td>
         <td>Theresa L. Windus</td>
     </tr>
     <tr>
@@ -151,21 +155,94 @@ Ultimately, the design which minimizes repetition and enforces atomicity is addi
     </tr>
 </table>
 
-Now, there is only one entry for each article in the article table, and a separate entry matching each author with an article. 
+Now, there is only one entry for each article in the article table, and a separate entry matching each author with an article.  When we choose to express information in this way, we assume that names are unique (as in, no two authors can have the same name). This may not be true, so you may want to implement some other identifier for authors such as an ID number. No matter if we use names or IDs, we will need another name that lists all unique authors. If we do this, we will replace the author table with something like this
 
-### Primary Keys
+<table style="width:50%">
+    <tr>
+        <th>Article DOI</th>
+        <th>Author ID</th>
+    </tr>
+    <tr>
+        <td>'10.1063/1.5052551'</td>
+        <td>1</td>
+    </tr>
+    <tr>
+        <td>'10.1063/1.5052551'</td>
+        <td>2</td>
+    </tr>
+    <tr>
+        <td>'10.1063/1.5052551'</td>
+        <td>3</td>
+    </tr>
+    <tr>
+        <td>'10.1063/1.5052551'</td>
+        <td>4</td>
+    </tr>
+    <tr>
+        <td>'10.1063/1.2137323'</td>
+        <td>5</td>
+    </tr>
+    <tr>
+        <td>'10.1063/1.2137323'</td>
+        <td>2</td>
+    </tr>
+</table>
 
-We see that in this table, both article and author are repeated. Assuming that all authors can be uniquely identified by their name, we would also want to add a table where author information is presented. Since names can sometimes repeat, we probably want to use some other identifier for the author like an ID.
+Since names can sometimes repeat, we probably want to use some other identifier for the author like an ID.
+
+## Article - Author Table
+
+
+<table style="width:50%">
+    <tr>
+        <th>Author ID</th>
+        <th>Author Name</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>Anna Krylov</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>T. Daniel Crawford</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>Theresa Windus</td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>Taylor Barnes</td>
+    </tr>
+</table>
+
+
+### Identifying unique entries - Primary Keys
+
+We know have three tables which express information about our papers and authors. In a relational database, having unique identifiers is important for records in tables. Consider the tables we currently have.
+
+We have a `papers` table which tells us a unique identifier for each paper (the DOI). The DOI should never be repeated. If a new paper is added, it will never have the same DOI as a previously added paper (otherwise, it will be that paper! The DOI is a unique identifier)
+
+We also have a unique identifier (Author ID) in the `authors` table. 
+
+The examples of the `DOI` and `Author ID` are known as `primary keys` in the table. A primary key **uniquely specifies** a record in a table. Each table MUST have a primary key.
+
+Primary keys may be single columns, or they may be multiple columns. For `authors` and `papers`, we have single column primary keys. For our `article-author` table, you will see that neither of the columns has unique values. Both authors and papers can be repeated. However, we would never expect the combination of the two columns to repeat. In this case, our primary key is both columns. We'll see more on this later.
 
 ## Relationships
+Central to the idea of relational databases are...relationships! You can already see from inspection how these tables are related. You would be able to figure out authors for a paper by tracing relationships through our three tables. Relational databases have specific relationship patterns, so let's discuss these.
 
 ### Many to Many relationships
 The article-author table we've created is what is known as an associative table. Consider the type of relationship between papers and authors. One paper can have many authors, and one authors can have many papers (consider that T. Daniel Crawford is an author on two of our papers). This is called a *many to many* relationship. When we have these in a database, we will have an associative table. In addition to the two tables outlined, we will also have an author table (where each author is listed by ID) which the `article-author` table will index into. 
 
 ### One to Many and Many to One relationships
-Another type of relationship is the one to many relationship. An example of this is the relationship between journals and papers. Papers belong to one journal, but a journal can have many papers associated with it. We do not need an associative table for this type of relationship because the paper table can reference the journal ID directly in a column on the table (since there is only one value per paper).
+Another type of relationship is the *one to many* relationship. An example of this is the relationship between journals and papers. Papers belong to only one journal, but a journal can have many papers associated with it. We do not need an associative table for this type of relationship because the paper table can reference the journal ID directly in a column on the table (since there is only one value per paper).
 
 ### Foreign Keys
+
+The columns in the `article-author` table are also examples of **foreign keys**. Foreign keys reference values in other tables. For example, the `Article DOI` column in the `article-author` table references the `DOI` column in the  `article` table. Foreign keys are constraints, we should never have an article DOI appear in the `article-author` table which does not have an entry in the `article` table. 
+
+The `author ID` column in the `article-author` table is a foreign key which references the `author ID` column in the `author` table. Don't worry if this is all a lot to remember right now! We will work on applying these ideas later.
 
 ## Deciding Table Structure
 
@@ -174,71 +251,51 @@ By going through the information we would like to store and enforcing atomicity 
 We will now limit redundancy and make the values atomic. We will need to create new tables in some cases in order to associate tables together.
 
 > ## Exercise 
-> Take 10 minutes to think about the information we have and how we might organize them into tables. Work on structure of other tables.
+> Take a few minutes to think about the information we have and how we might organize them into tables.
+> 
+> Remember that we already have tables for `articles`, `authors` and an association table for matching articles and authors.
 >
-> We will want tables for papers, journals, authors, and author institutions.
+> We now want to add tables for journals, and for grouping articles together by the project we are working on. For journals, we want to store the journal name and a description of the journal. For projects, we also want a project name and a description.
+>
+> Label the primary keys and any foreign keys for each table.
 >
 >> ## Solution
 >> We start with the following tables.
 >> ### Papers Table
 >> Columns:
->> - DOI
+>> - DOI (primary key)
 >> - title
 >> - publication year
->> - journal
+>> - journal (foreign key to `name` column in `Journals` table.)
 >> 
->> ### Journals Table
->> Columns:
->> - name
->> - description
->>
 >> ### Authors Table
 >> Columns:
->> - ID
+>> - ID (primary)
 >> - name
->> - institution ID
->> 
->> ### Institution
+>>
+>> ### Paper - Authors Table
+>> Columns: 
+>> - Article DOI (foreign key to `DOI` column in `papers` table, primary key)
+>> - Author ID (foreign key to `author ID` column in `Authors` table, primary key)
+>>
+>> ### Journals Table
 >> Columns:
->> - Institution ID
->> - name
+>> - name (primary key)
+>> - description
+>>
+>> ### Project Table
+>> Columns:
+>> - name (primary key)
+>> - description
+>>
+>> Since a paper may belong to many projects, and a project will have many papers associated with it, this is a `many-to-many` relationship. We will also need an association table for matching projects and papers.
 >> 
->> We will also need an association table 
+>> ### Paper - Project Table
+>> Columns:
+>> - Paper DOI (foreign key to `DOI` in `papers` table, primary key)
+>> - Project name (foreign key to `name` in `projects` table, primary key)
 > {: .solution}
 {: .challenge}
-
-Paper Table
-- DOI
-- title
-- publication year
-- journal name
-
-Author Table
-- Author Name
-- Author affiliation
-
-Project Table
-- Project name
-- Project description
-
-## primary keys
-special column (or columns) which are unique identifiers for the table records.
-
-Association tables
-
-- Journal-Paper
-
-- Author-Paper
-
-- Project-Paper
-
-
-
-
-
-
-
-
 
 
 {% include links.md %}
